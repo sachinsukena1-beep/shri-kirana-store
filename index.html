@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#00953B">
+<title>श्री किराणा स्टोअर</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&display=swap');
+
+  :root{
+    --green:#00953B;
+    --green-dark:#0B6B2E;
+    --green-light:#4EB857;
+    --yellow:#FFD700;
+    --green-soft:#E6F5EC;
+    --ink:#17251d;
+    --muted:#6b7d74;
+    --line:#e6e9e4;
+    --bg:#F3F7F3;
+    --danger:#c0392b;
+    --shadow:0 6px 18px rgba(15,60,40,.09);
+    --tabbar-h:74px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;}
+  body{
+    font-family:'Mukta',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.6;font-size:17px;
+    -webkit-font-smoothing:antialiased;
+  }
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+  input,select{font-family:inherit;}
+  .hidden{display:none !important;}
+
+  /* ---------- App bar ---------- */
+  .appbar{
+    position:sticky;top:0;z-index:40;
+    background:linear-gradient(150deg,#00A342,#00702A);color:#fff;
+    display:flex;align-items:center;gap:12px;
+    padding:14px 16px;box-shadow:0 4px 16px rgba(10,60,35,.28);
+  }
+  .ab-back{
+    width:42px;height:42px;flex:0 0 42px;border-radius:12px;
+    background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);
+    font-size:22px;font-weight:800;display:grid;place-items:center;color:#fff;
+  }
+  .ab-logo{width:44px;height:44px;flex:0 0 44px;border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.2);}
+  .ab-logo svg{width:100%;height:100%;display:block;}
+  .ab-title{flex:1;min-width:0;font-size:20px;font-weight:800;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .ab-cart{
+    position:relative;width:46px;height:46px;flex:0 0 46px;border-radius:13px;
+    background:var(--yellow);color:#0B4B22;font-size:22px;display:grid;place-items:center;
+    box-shadow:0 3px 10px rgba(0,0,0,.2);
+  }
+  .ab-cart .badge{position:absolute;top:-6px;right:-6px;background:#0B4B22;color:#FFD700;border-radius:999px;font-size:12px;font-weight:800;padding:1px 7px;min-width:20px;}
+
+  /* ---------- Screens ---------- */
+  main{padding:0 0 var(--tabbar-h);}
+  .screen{display:none;padding:18px 16px 26px;max-width:640px;margin:0 auto;}
+  .screen.active{display:block;animation:fade .22s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .h1{font-size:23px;font-weight:800;color:var(--ink);margin-bottom:4px;}
+  .h1 .sub{display:block;font-size:14px;font-weight:600;color:var(--muted);margin-top:2px;}
+
+  /* ---------- Home ---------- */
+  .home-hero{background:#fff;border-radius:20px;padding:20px;box-shadow:var(--shadow);text-align:center;margin-bottom:16px;}
+  .hero-logo{width:96px;height:96px;margin:0 auto 12px;border-radius:24px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,.16);}
+  .hero-logo svg{width:100%;height:100%;display:block;}
+  .hero-name{font-size:27px;font-weight:800;line-height:1.2;color:var(--green-dark);}
+  .hero-tag{font-size:15px;color:var(--muted);margin-top:6px;}
+  .ribbon{background:var(--yellow);color:#0B4B22;text-align:center;font-weight:800;font-size:15px;padding:10px 14px;border-radius:14px;margin-bottom:16px;}
+  .infolist{display:grid;gap:12px;margin-bottom:18px;}
+  .infocard{display:flex;align-items:center;gap:14px;background:#fff;border-radius:16px;padding:16px;box-shadow:var(--shadow);text-decoration:none;color:inherit;}
+  .infocard .ic{width:48px;height:48px;flex:0 0 48px;border-radius:14px;background:var(--green-soft);display:grid;place-items:center;font-size:24px;}
+  .infocard .lbl{font-size:13.5px;color:var(--muted);font-weight:600;}
+  .infocard .val{font-size:18px;font-weight:700;color:var(--ink);word-break:break-word;}
+  .bigbtn{
+    width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
+    padding:17px;border-radius:16px;font-weight:800;font-size:18px;box-shadow:var(--shadow);transition:transform .08s;
+  }
+  .bigbtn:active{transform:scale(.98);}
+  .bigbtn + .bigbtn{margin-top:12px;}
+  .bigbtn.wa{background:#25D366;color:#06301b;}
+  .bigbtn.map{background:#fff;color:var(--green-dark);border:2px solid var(--green-soft);}
+  .bigbtn.shop{background:var(--green);color:#fff;}
+
+  /* ---------- Category list ---------- */
+  .catlist{display:grid;gap:12px;}
+  .catcard{display:flex;align-items:center;gap:15px;background:#fff;border-radius:18px;padding:18px 16px;box-shadow:var(--shadow);text-align:left;width:100%;transition:transform .08s;}
+  .catcard:active{transform:scale(.98);}
+  .catcard .cic{width:56px;height:56px;flex:0 0 56px;border-radius:16px;background:var(--green-soft);display:grid;place-items:center;font-size:30px;}
+  .catcard .cnm{flex:1;min-width:0;font-size:20px;font-weight:800;color:var(--ink);}
+  .catcard .ccount{font-size:14px;color:var(--muted);font-weight:600;display:block;margin-top:1px;}
+  .catcard .arrow{font-size:24px;color:#b9c6bf;font-weight:700;}
+
+  /* ---------- Product cards ---------- */
+  .pcard{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:14px;}
+  .pcard.oos{opacity:.68;}
+  .pcard-top{display:flex;gap:14px;padding:15px;}
+  .pthumb{width:100px;height:100px;flex:0 0 100px;border-radius:14px;background:var(--green-soft);display:grid;place-items:center;font-size:50px;overflow:hidden;}
+  .pthumb img{width:100%;height:100%;object-fit:cover;}
+  .pinfo{flex:1;min-width:0;}
+  .pname{font-weight:800;font-size:19px;line-height:1.3;color:var(--ink);}
+  .prow{display:flex;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap;}
+  .pmrp{font-size:16px;color:var(--muted);text-decoration:line-through;}
+  .pnow{font-size:23px;font-weight:800;color:var(--ink);}
+  .poff{background:var(--green);color:#fff;font-size:13.5px;font-weight:800;padding:3px 9px;border-radius:7px;}
+  .ptax{font-size:13px;color:var(--muted);margin-top:3px;}
+  .packrow{padding:0 15px 14px;}
+  .packsel{
+    width:100%;padding:12px;border-radius:11px;border:1.5px solid var(--line);
+    font-size:16.5px;font-weight:700;background:#fff;color:var(--ink);
+    appearance:none;-webkit-appearance:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%236b7d74' stroke-width='2.5'><path d='M6 9l6 6 6-6'/></svg>");
+    background-repeat:no-repeat;background-position:right 12px center;
+  }
+  .packstatic{padding:12px;border-radius:11px;background:var(--bg);font-size:16.5px;font-weight:700;color:var(--muted);}
+  .rate{display:block;font-size:13.5px;color:var(--muted);margin-top:6px;}
+  .padd{width:100%;background:var(--green);color:#fff;font-weight:800;font-size:17px;letter-spacing:.5px;padding:15px;text-align:center;border-top:1px solid var(--line);}
+  .padd:active{background:var(--green-dark);}
+  .padd:disabled{background:#cdd8d1;color:#eef3f0;letter-spacing:0;}
+  .badge-oos{display:inline-block;font-size:13px;font-weight:700;color:var(--danger);background:#fdecea;padding:3px 10px;border-radius:999px;margin:0 15px 12px;}
+  .empty{padding:48px 20px;text-align:center;color:var(--muted);font-size:17px;}
+
+  /* ---------- Cart ---------- */
+  .cartline{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff;border-radius:16px;padding:15px;box-shadow:var(--shadow);margin-bottom:12px;}
+  .cartline .cn{font-size:18px;font-weight:800;}
+  .cartline .cu{font-size:14.5px;color:var(--muted);display:block;}
+  .qty{display:flex;align-items:center;gap:14px;}
+  .qty button{width:40px;height:40px;border-radius:12px;background:var(--green-soft);color:var(--green-dark);font-weight:800;font-size:22px;line-height:1;display:grid;place-items:center;}
+  .qty span{min-width:26px;text-align:center;font-weight:800;font-size:19px;}
+  .totalrow{display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:16px;padding:18px;box-shadow:var(--shadow);font-size:19px;font-weight:700;margin:6px 0 16px;}
+  .totalrow b{font-size:24px;color:var(--green-dark);}
+  .custbox{background:#fff;border-radius:16px;padding:16px;box-shadow:var(--shadow);margin:0 0 16px;}
+  .custhead{font-size:17px;font-weight:800;color:var(--green-dark);margin-bottom:12px;}
+
+  /* ---------- Tab bar ---------- */
+  .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:50;height:var(--tabbar-h);background:#fff;border-top:1px solid var(--line);display:flex;box-shadow:0 -4px 18px rgba(0,0,0,.07);padding-bottom:env(safe-area-inset-bottom);}
+  .tabbtn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#8a9a92;font-weight:700;font-size:13px;position:relative;}
+  .tabbtn .ticon{font-size:24px;line-height:1;}
+  .tabbtn.active{color:var(--green);}
+  .tabbtn .tbadge{position:absolute;top:8px;left:calc(50% + 8px);background:var(--green);color:#fff;border-radius:999px;font-size:11px;font-weight:800;padding:1px 6px;min-width:18px;}
+
+  /* ---------- Admin ---------- */
+  .login-wrap{max-width:380px;margin:8vh auto;padding:28px 22px;background:#fff;border-radius:22px;box-shadow:var(--shadow);text-align:center;}
+  .login-wrap .lock{font-size:44px;}
+  .login-wrap h2{margin:10px 0 4px;font-size:22px;}
+  .login-wrap p{color:var(--muted);font-size:15px;margin-bottom:18px;}
+  .field{margin-bottom:14px;text-align:left;}
+  .field label{display:block;font-size:14px;font-weight:700;color:var(--muted);margin-bottom:6px;}
+  .field input,.field select{width:100%;padding:14px;border-radius:13px;border:1.5px solid var(--line);font-size:17px;background:#fff;color:var(--ink);}
+  .field input:focus,.field select:focus{outline:none;border-color:var(--green);}
+  .btn-primary{width:100%;background:var(--green);color:#fff;padding:16px;border-radius:14px;font-weight:800;font-size:18px;box-shadow:0 4px 14px rgba(15,123,70,.3);}
+  .btn-primary:active{transform:scale(.98);}
+  .login-err{color:var(--danger);font-size:15px;font-weight:600;margin-top:10px;min-height:18px;}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:20px;}
+  .stat{background:#fff;border-radius:16px;padding:16px 10px;text-align:center;box-shadow:var(--shadow);}
+  .stat .num{font-size:30px;font-weight:800;color:var(--green);line-height:1.1;}
+  .stat .lbl{font-size:13px;color:var(--muted);font-weight:700;margin-top:5px;}
+  .section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:22px 0 12px;}
+  .section-head h3{font-size:19px;font-weight:800;color:var(--green-dark);}
+  .btn-sm{padding:11px 16px;border-radius:12px;font-weight:800;font-size:15px;background:var(--green);color:#fff;}
+  .btn-sm.ghost{background:#fff;color:var(--green-dark);border:1.5px solid var(--line);}
+  .btn-sm.danger{background:#fdecea;color:var(--danger);}
+  .panel{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden;}
+  .cat-block{padding:16px;border-bottom:1px solid var(--line);}
+  .cat-block:last-child{border-bottom:none;}
+  .cat-block .cat-head{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .cat-block .cat-head strong{font-size:18px;color:var(--green-dark);}
+  .arow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 0;border-top:1px dashed var(--line);margin-top:8px;}
+  .arow .meta{min-width:0;}
+  .arow .meta b{font-size:17px;}
+  .arow .meta span{display:block;font-size:14px;color:var(--muted);}
+  .arow .acts{display:flex;gap:8px;flex:0 0 auto;}
+  .icon-btn{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:var(--bg);border:1px solid var(--line);font-size:17px;}
+  .icon-btn.on{background:var(--green-soft);border-color:#bfe6d3;color:var(--green-dark);}
+  .icon-btn.del{color:var(--danger);}
+  .admin-note{background:#FFF7D6;border:1px solid #f3d9ae;border-radius:14px;padding:13px 15px;font-size:14px;color:#8a5a09;margin-bottom:18px;line-height:1.55;}
+
+  /* ---------- Modal ---------- */
+  .modal-overlay{position:fixed;inset:0;z-index:80;background:rgba(10,30,20,.55);display:flex;align-items:flex-end;justify-content:center;}
+  .modal{background:#fff;width:100%;max-width:520px;border-radius:24px 24px 0 0;padding:24px 20px 28px;box-shadow:0 -10px 40px rgba(0,0,0,.3);animation:up .22s ease;max-height:92vh;overflow-y:auto;}
+  @keyframes up{from{transform:translateY(30px);opacity:.4}to{transform:translateY(0);opacity:1}}
+  .modal h3{font-size:20px;font-weight:800;margin-bottom:18px;color:var(--green-dark);}
+  .modal .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .modal-actions{display:flex;gap:10px;margin-top:8px;}
+  .modal-actions .btn-primary{flex:1;}
+  .modal-actions .btn-sm{flex:0 0 auto;padding:16px 20px;}
+  .imgpick{display:flex;gap:12px;align-items:center;}
+  .imgprev{width:90px;height:90px;flex:0 0 90px;border-radius:12px;background:var(--bg);border:1.5px dashed var(--line);display:grid;place-items:center;overflow:hidden;color:var(--muted);font-size:12.5px;text-align:center;padding:4px;}
+  .imgprev img{width:100%;height:100%;object-fit:cover;}
+  .imgbtns{display:flex;flex-direction:column;gap:8px;flex:1;}
+
+  /* ---------- Toast ---------- */
+  .toast{position:fixed;left:50%;top:78px;transform:translateX(-50%) translateY(-100px);background:var(--ink);color:#fff;padding:13px 22px;border-radius:999px;font-size:15px;font-weight:700;z-index:120;opacity:0;transition:all .25s ease;box-shadow:0 8px 24px rgba(0,0,0,.3);max-width:90vw;text-align:center;}
+  .toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+
+  @media(min-width:600px){
+    .modal-overlay{align-items:center;}
+    .modal{border-radius:24px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== APP BAR ===================== -->
+<header class="appbar">
+  <button class="ab-back hidden" id="abBack" onclick="backToProducts()">←</button>
+  <div class="ab-logo" id="abLogo">
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <rect width="64" height="64" fill="#FFD700"/>
+      <path d="M19 45c-4.5 0-8-3.6-8-9 0-10 8.6-17.5 15.8-17.5 4.2 0 6.6 2.3 6.6 6.4 0 9.9-8.3 20.1-14.4 20.1z" fill="#367639"/>
+      <path d="M45 19c4.5 0 8 3.6 8 9 0 10-8.6 17.5-15.8 17.5-4.2 0-6.6-2.3-6.6-6.4 0-9.9 8.3-20.1 14.4-20.1z" fill="#4EB857"/>
+    </svg>
+  </div>
+  <div class="ab-title" id="abTitle">श्री किराणा स्टोअर</div>
+  <button class="ab-cart" onclick="go('cart')">🛒<span class="badge hidden" id="cartBadge">0</span></button>
+</header>
+
+<main>
+
+  <!-- ============ SCREEN: HOME ============ -->
+  <section class="screen active" id="scr-home">
+    <div class="home-hero">
+      <div class="hero-logo">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="64" height="64" fill="#FFD700"/>
+          <path d="M19 45c-4.5 0-8-3.6-8-9 0-10 8.6-17.5 15.8-17.5 4.2 0 6.6 2.3 6.6 6.4 0 9.9-8.3 20.1-14.4 20.1z" fill="#367639"/>
+          <path d="M45 19c4.5 0 8 3.6 8 9 0 10-8.6 17.5-15.8 17.5-4.2 0-6.6-2.3-6.6-6.4 0-9.9 8.3-20.1 14.4-20.1z" fill="#4EB857"/>
+        </svg>
+      </div>
+      <div class="hero-name" id="hName">श्री किराणा स्टोअर</div>
+      <div class="hero-tag" id="hTag">ताजे धान्य · डाळी · मसाले · घरगुती वस्तू</div>
+    </div>
+
+    <div class="ribbon">⭐ रोज कमी किंमत · रोज बचत · ताजे माल ⭐</div>
+
+    <div class="infolist">
+      <a class="infocard" id="hPhoneCard" href="#">
+        <div class="ic">📞</div>
+        <div><div class="lbl">Contact Number</div><div class="val" id="hPhone">+91 98765 43210</div></div>
+      </a>
+      <a class="infocard" id="hMapCard" href="#" target="_blank" rel="noopener">
+        <div class="ic">📍</div>
+        <div><div class="lbl">दुकानाचा पत्ता</div><div class="val" id="hAddress">मुख्य रस्ता, शिवाजी चौक, पुणे — 411001</div></div>
+      </a>
+      <div class="infocard">
+        <div class="ic">🕒</div>
+        <div><div class="lbl">दुकानाची वेळ</div><div class="val" id="hHours">सकाळी 8:00 ते रात्री 9:00 (रोज)</div></div>
+      </div>
+    </div>
+
+    <button class="bigbtn shop" onclick="go('products')">🛍️ आमच्या वस्तू व किंमती पहा</button>
+    <a class="bigbtn wa" id="hWa" href="#">💬 WhatsApp वर संपर्क करा</a>
+    <a class="bigbtn map" id="hMap" href="#" target="_blank" rel="noopener">🗺️ Google Maps वर दुकान</a>
+  </section>
+
+  <!-- ============ SCREEN: CATEGORIES ============ -->
+  <section class="screen" id="scr-products">
+    <div class="h1">वस्तूंचे प्रकार<span class="sub">एक प्रकार निवडा आणि किंमती पहा</span></div>
+    <div class="catlist" id="catList" style="margin-top:16px"></div>
+  </section>
+
+  <!-- ============ SCREEN: PRODUCTS OF A CATEGORY ============ -->
+  <section class="screen" id="scr-category">
+    <div class="h1" id="catTitle">धान्य</div>
+    <div id="products" style="margin-top:14px"></div>
+  </section>
+
+  <!-- ============ SCREEN: CART ============ -->
+  <section class="screen" id="scr-cart">
+    <div class="h1">तुमची कार्ट</div>
+    <div id="cartList" style="margin-top:16px"></div>
+  </section>
+
+  <!-- ============ SCREEN: ADMIN ============ -->
+  <section class="screen" id="scr-admin">
+    <div id="loginView" class="login-wrap">
+      <div class="lock">🔒</div>
+      <h2>दुकानदार लॉगिन</h2>
+      <p>कृपया पासवर्ड टाका</p>
+      <div class="field">
+        <label for="pw">पासवर्ड</label>
+        <input type="password" id="pw" placeholder="पासवर्ड" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <button class="btn-primary" onclick="doLogin()">लॉगिन करा</button>
+      <div class="login-err" id="loginErr"></div>
+      <div style="margin-top:12px;font-size:14px;color:var(--muted)">डेमो पासवर्ड: <b>admin123</b></div>
+    </div>
+
+    <div id="panelView" class="hidden">
+      <div class="admin-note">ℹ️ हा डेमो ब्राउझरच्या LocalStorage मध्ये डेटा साठवतो — बदल तुमच्या या ब्राउझरमध्ये कायम राहतील आणि लगेच ग्राहकांच्या पेजवर दिसतील.</div>
+
+      <div class="stats">
+        <div class="stat"><div class="num" id="stCat">0</div><div class="lbl">Categories</div></div>
+        <div class="stat"><div class="num" id="stProd">0</div><div class="lbl">Products</div></div>
+        <div class="stat"><div class="num" id="stAvail">0</div><div class="lbl">उपलब्ध</div></div>
+      </div>
+
+      <div class="section-head">
+        <h3>📦 Categories व Products</h3>
+        <button class="btn-sm" onclick="openAddCategory()">➕ Category</button>
+      </div>
+      <div class="panel" id="catPanel"></div>
+
+      <div class="section-head"><h3>⚙️ इतर</h3></div>
+      <div class="panel" style="padding:16px;display:flex;flex-wrap:wrap;gap:10px;">
+        <button class="btn-sm ghost" onclick="changePassword()">🔑 पासवर्ड बदला</button>
+        <button class="btn-sm ghost" onclick="exportData()">⬇️ डेटा बॅकअप</button>
+        <button class="btn-sm danger" onclick="resetData()">♻️ सुरुवातीचा डेटा</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===================== TAB BAR ===================== -->
+<nav class="tabbar">
+  <button class="tabbtn active" data-tab="home" onclick="go('home')"><span class="ticon">🏪</span>दुकान</button>
+  <button class="tabbtn" data-tab="products" onclick="go('products')"><span class="ticon">🛍️</span>वस्तू</button>
+  <button class="tabbtn" data-tab="cart" onclick="go('cart')"><span class="ticon">🛒</span>कार्ट<span class="tbadge hidden" id="tabBadge">0</span></button>
+  <button class="tabbtn" data-tab="admin" onclick="go('admin')"><span class="ticon">🔒</span>दुकानदार</button>
+</nav>
+
+<!-- ===================== PRODUCT MODAL ===================== -->
+<div id="modal" class="modal-overlay hidden">
+  <div class="modal">
+    <h3 id="mTitle">वस्तू</h3>
+    <div id="mBody"></div>
+    <div class="modal-actions">
+      <button class="btn-primary" id="mSave" onclick="modalSave()">सेव्ह करा</button>
+      <button class="btn-sm ghost" onclick="closeModal()">रद्द</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+/* ============================================================
+   Kirana Store — tabbed app with pack sizes (LocalStorage)
+   ============================================================ */
+const STORAGE_KEY = 'kirana_store_v2';
+const CART_KEY = 'kirana_cart_v2';
+const CUSTOMER_KEY = 'kirana_customer_v1';
+const DEFAULT_PASSWORD = 'admin123';
+
+function uid(){ return Math.random().toString(36).slice(2,9); }
+function p(name, base, price, mrp, pack, img){
+  return { id:uid(), name, base, price, mrp, pack, img:img||'', available:true };
+}
+
+/* Pack families (multiplier is of the base unit) */
+const WEIGHT_PACKS = [
+  {label:'50 g', m:0.05}, {label:'100 g', m:0.1}, {label:'250 g', m:0.25},
+  {label:'500 g', m:0.5}, {label:'1 kg', m:1}, {label:'5 kg', m:5}
+];
+const VOLUME_PACKS = [
+  {label:'100 ml', m:0.1}, {label:'250 ml', m:0.25}, {label:'500 ml', m:0.5},
+  {label:'1 L', m:1}, {label:'5 L', m:5}
+];
+const PC_PACKS = ['packet','piece','नग','डबा'];
+
+const DEFAULT_DATA = {
+  store:{
+    name:'श्री किराणा स्टोअर',
+    tagline:'ताजे धान्य · डाळी · मसाले · घरगुती वस्तू',
+    phone:'+91 88308 99622',
+    whatsapp:'918830899622',
+    address:'मुख्य रस्ता, शिवाजी चौक, पुणे — 411001',
+    mapsUrl:'https://www.google.com/maps/search/?api=1&query=Shivaji+Chowk+Pune',
+    hours:'सकाळी 8:00 ते रात्री 9:00 (रोज)'
+  },
+  password: DEFAULT_PASSWORD,
+  categories:[
+    {id:uid(), name:'धान्य', products:[
+      p('तांदूळ','kg',60,72,'1 kg'), p('गहू','kg',45,52,'1 kg'), p('ज्वारी','kg',50,58,'1 kg'),
+      p('बाजरी','kg',55,64,'1 kg'), p('मका','kg',40,46,'1 kg')
+    ]},
+    {id:uid(), name:'डाळी', products:[
+      p('तूर डाळ','kg',140,160,'1 kg'), p('मूग डाळ','kg',120,138,'1 kg'), p('मसूर डाळ','kg',110,126,'1 kg'),
+      p('चणा डाळ','kg',95,110,'1 kg'), p('उडीद डाळ','kg',130,148,'1 kg')
+    ]},
+    {id:uid(), name:'मसाले', products:[
+      p('हळद','kg',480,552,'250 g'), p('तिखट','kg',600,688,'250 g'), p('धणे पावडर','kg',440,504,'250 g'),
+      p('गरम मसाला','kg',800,920,'100 g'), p('जिरे','kg',900,1040,'100 g')
+    ]},
+    {id:uid(), name:'तेल', products:[
+      p('सूर्यफूल तेल','L',140,160,'1 L'), p('मोहरी तेल','L',180,200,'1 L'),
+      p('खोबरेल तेल','L',200,225,'1 L'), p('शेंगदाणा तेल','L',190,215,'1 L')
+    ]},
+    {id:uid(), name:'साखर', products:[
+      p('साखर','kg',45,52,'1 kg'), p('गूळ','kg',70,80,'1 kg'), p('जागरी','kg',65,75,'1 kg')
+    ]},
+    {id:uid(), name:'बिस्कीट', products:[
+      p('पार्ले-जी','pc',10,12,'packet'), p('मारी बिस्कीट','pc',30,35,'packet'),
+      p('गुड डे','pc',20,24,'packet'), p('बर्बन','pc',35,40,'packet')
+    ]},
+    {id:uid(), name:'चहा-कॉफी', products:[
+      p('टाटा चहा','kg',560,640,'250 g'), p('रेड लेबल चहा','kg',600,680,'250 g'),
+      p('ब्रू कॉफी','kg',1800,2100,'50 g'), p('नेस्कॅफे','kg',1800,2050,'100 g')
+    ]},
+    {id:uid(), name:'घरगुती वस्तू', products:[
+      p('सर्फ','kg',110,125,'1 kg'), p('व्हिम बार','pc',10,12,'piece'), p('साबण','pc',35,40,'piece'),
+      p('कोलगेट','kg',950,1080,'100 g'), p('हार्पिक','L',110,124,'500 ml')
+    ]}
+  ]
+};
+
+const CAT_ICON = {
+  'धान्य':'🌾','डाळी':'🫘','मसाले':'🌶️','तेल':'🫙','साखर':'🍬',
+  'बिस्कीट':'🍪','चहा-कॉफी':'☕','घरगुती वस्तू':'🧴'
+};
+
+let data = load();
+let activeCat = data.categories[0] ? data.categories[0].id : null;
+let isLoggedIn = false;
+let cart = loadCart();
+let customer = loadCustomer();
+let selPack = {};
+let screen = 'home';
+
+/* ---------- pack helpers ---------- */
+function packsFor(it){
+  if(it.base === 'kg') return WEIGHT_PACKS;
+  if(it.base === 'L') return VOLUME_PACKS;
+  return [{label: it.pack || 'नग', m:1}];
+}
+function packMult(it, label){
+  const arr = packsFor(it);
+  const f = arr.find(x=>x.label===label) || arr.find(x=>x.label===it.pack) || arr[0];
+  return f.m;
+}
+function priceFor(it, label){ return Math.round(Number(it.price) * packMult(it, label)); }
+function mrpFor(it, label){ return Math.round(Number(it.mrp) * packMult(it, label)); }
+function baseLabel(it){ return it.base==='kg' ? 'kg' : it.base==='L' ? 'litre' : 'नग'; }
+
+/* ---------- persistence ---------- */
+function load(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return structuredClone(DEFAULT_DATA);
+    const parsed = JSON.parse(raw);
+    if(!parsed.store || !Array.isArray(parsed.categories)) throw 0;
+    parsed.categories.forEach(c=>c.products.forEach(it=>{
+      if(it.base==null) it.base = 'kg';
+      if(it.pack==null) it.pack = (it.base==='pc' ? 'packet' : (it.base==='L' ? '1 L' : '1 kg'));
+      if(it.img==null) it.img = '';
+      if(it.mrp==null) it.mrp = it.price;
+    }));
+    // store contact number is managed here (kept in sync even if older data was saved)
+    parsed.store.phone = DEFAULT_DATA.store.phone;
+    parsed.store.whatsapp = DEFAULT_DATA.store.whatsapp;
+    return parsed;
+  }catch(e){ return structuredClone(DEFAULT_DATA); }
+}
+function save(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }catch(e){ toast('डेटा सेव्ह झाला नाही'); } }
+function loadCart(){ try{ return JSON.parse(localStorage.getItem(CART_KEY)) || {}; }catch(e){ return {}; } }
+function saveCart(){ try{ localStorage.setItem(CART_KEY, JSON.stringify(cart)); }catch(e){} }
+function loadCustomer(){ try{ return JSON.parse(localStorage.getItem(CUSTOMER_KEY)) || {name:'',phone:'',address:''}; }catch(e){ return {name:'',phone:'',address:''}; } }
+function saveCustomer(){ try{ localStorage.setItem(CUSTOMER_KEY, JSON.stringify(customer)); }catch(e){} }
+function setCustomer(el){ customer[el.dataset.k] = el.value; saveCustomer(); }
+
+/* ---------- helpers ---------- */
+function esc(s){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function findCat(id){ return data.categories.find(c=>c.id===id); }
+function findProduct(cat, pid){ return cat ? cat.products.find(x=>x.id===pid) : null; }
+function findProductAnywhere(pid){
+  for(const c of data.categories){ const it = c.products.find(x=>x.id===pid); if(it) return {cat:c, it}; }
+  return null;
+}
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._tm); t._tm = setTimeout(()=>t.classList.remove('show'), 1900);
+}
+function waLink(text){
+  const num = String(data.store.whatsapp).replace(/[^0-9]/g,'');
+  return 'https://wa.me/' + num + '?text=' + encodeURIComponent(text);
+}
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+function go(name){
+  screen = name;
+  document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active', s.id==='scr-'+name));
+  document.querySelectorAll('.tabbtn').forEach(b=>{
+    const t = (name==='category') ? 'products' : name;
+    b.classList.toggle('active', b.dataset.tab===t);
+  });
+  const onCat = (name==='category');
+  document.getElementById('abBack').classList.toggle('hidden', !onCat);
+  document.getElementById('abLogo').classList.toggle('hidden', onCat);
+  document.getElementById('abTitle').textContent = onCat
+    ? (findCat(activeCat) ? findCat(activeCat).name : 'वस्तू')
+    : data.store.name;
+  window.scrollTo(0,0);
+  if(name==='cart') renderCart();
+  if(name==='admin') renderAdminScreen();
+}
+function backToProducts(){ go('products'); }
+function openCategory(cid){ activeCat = cid; renderProducts(); go('category'); }
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+function renderStore(){
+  const s = data.store;
+  document.getElementById('hName').textContent = s.name;
+  document.getElementById('hTag').textContent = s.tagline;
+  document.getElementById('hPhone').textContent = s.phone;
+  document.getElementById('hAddress').textContent = s.address;
+  document.getElementById('hHours').textContent = s.hours;
+  document.getElementById('abTitle').textContent = s.name;
+  document.getElementById('hPhoneCard').href = 'tel:' + String(s.phone).replace(/[^0-9+]/g,'');
+  const map = s.mapsUrl || ('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(s.address));
+  document.getElementById('hMap').href = map;
+  document.getElementById('hMapCard').href = map;
+  document.getElementById('hWa').href = waLink('नमस्कार, ' + s.name + ' — मला वस्तूंची चौकशी करायची आहे.');
+}
+
+function renderCategories(){
+  const host = document.getElementById('catList');
+  host.innerHTML = data.categories.map(c=>{
+    const icon = CAT_ICON[c.name] || '🛍️';
+    return '<button class="catcard" onclick="openCategory(\''+c.id+'\')">'+
+      '<div class="cic">'+icon+'</div>'+
+      '<div class="cnm">'+esc(c.name)+'<span class="ccount">'+c.products.length+' वस्तू</span></div>'+
+      '<div class="arrow">›</div>'+
+    '</button>';
+  }).join('') || '<div class="empty">अजून कोणतीही Category नाही.</div>';
+}
+
+function setPack(pid, label){ selPack[pid] = label; renderProducts(); }
+
+function renderProducts(){
+  const cat = findCat(activeCat) || data.categories[0];
+  const host = document.getElementById('products');
+  if(!cat){ host.innerHTML = '<div class="empty">अजून कोणतीही Category नाही.</div>'; return; }
+  document.getElementById('catTitle').textContent = cat.name;
+  const list = cat.products;
+  const icon = CAT_ICON[cat.name] || '🛍️';
+  if(!list.length){ host.innerHTML = '<div class="empty">या Category मध्ये अजून वस्तू नाही.</div>'; return; }
+
+  host.innerHTML = list.map(it=>{
+    const thumb = it.img ? '<img src="'+esc(it.img)+'" alt="">' : icon;
+    const packs = packsFor(it);
+    let sel = selPack[it.id] || it.pack;
+    if(!packs.some(x=>x.label===sel)) sel = packs[0].label;
+    const price = priceFor(it, sel);
+    const mrp = mrpFor(it, sel);
+    const hasOff = mrp > price;
+    const off = hasOff ? mrp - price : 0;
+
+    const packControl = packs.length > 1
+      ? '<select class="packsel" onchange="setPack(\''+it.id+'\', this.value)">'+
+          packs.map(x=>'<option value="'+esc(x.label)+'"'+(x.label===sel?' selected':'')+'>'+esc(x.label)+'</option>').join('')+
+        '</select>'
+      : '<div class="packstatic">'+esc(sel)+'</div>';
+
+    const rate = (it.base==='kg' || it.base==='L')
+      ? '<span class="rate">₹'+Number(it.price)+' / 1 '+baseLabel(it)+'</span>' : '';
+
+    return '<div class="pcard'+(it.available?'':' oos')+'">'+
+      '<div class="pcard-top">'+
+        '<div class="pthumb">'+thumb+'</div>'+
+        '<div class="pinfo">'+
+          '<div class="pname">'+esc(it.name)+'</div>'+
+          '<div class="prow">'+
+            (hasOff ? '<span class="pmrp">MRP ₹'+mrp+'</span>' : '')+
+            '<span class="pnow">₹'+price+'</span>'+
+            (hasOff ? '<span class="poff">₹'+off+' OFF</span>' : '')+
+          '</div>'+
+          '<div class="ptax">(सर्व करांसह)</div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="packrow">'+packControl+rate+'</div>'+
+      (it.available ? '' : '<div class="badge-oos">सध्या उपलब्ध नाही</div>')+
+      '<button class="padd" '+(it.available?'':'disabled')+' onclick="addToCart(\''+it.id+'\')">'+
+        (it.available ? 'ADD TO CART' : 'उपलब्ध नाही')+
+      '</button>'+
+    '</div>';
+  }).join('');
+}
+
+/* ============================================================
+   CART
+   ============================================================ */
+function cartKey(pid, label){ return pid + '@' + label; }
+function cartEntry(key){
+  const i = key.lastIndexOf('@');
+  if(i < 0) return null;
+  const pid = key.slice(0,i), label = key.slice(i+1);
+  const f = findProductAnywhere(pid);
+  if(!f) return null;
+  return { it:f.it, label, price:priceFor(f.it, label) };
+}
+function cartCount(){ return Object.values(cart).reduce((a,b)=>a+b,0); }
+function cartTotal(){
+  let t = 0;
+  for(const k in cart){ const e = cartEntry(k); if(e) t += e.price * cart[k]; }
+  return t;
+}
+function updateBadges(){
+  const n = cartCount();
+  [document.getElementById('cartBadge'), document.getElementById('tabBadge')]
+    .forEach(b=>{ b.textContent = n; b.classList.toggle('hidden', n===0); });
+}
+function addToCart(pid){
+  const f = findProductAnywhere(pid);
+  if(!f || !f.it.available){ toast('ही वस्तू सध्या उपलब्ध नाही'); return; }
+  const packs = packsFor(f.it);
+  let label = selPack[pid] || f.it.pack;
+  if(!packs.some(x=>x.label===label)) label = packs[0].label;
+  const k = cartKey(pid, label);
+  cart[k] = (cart[k] || 0) + 1;
+  saveCart(); updateBadges();
+  toast(f.it.name + ' (' + label + ') कार्टमध्ये जोडले 🛒');
+}
+function incQty(k){ cart[k] = (cart[k]||0)+1; saveCart(); renderCart(); updateBadges(); }
+function decQty(k){ if(!cart[k]) return; cart[k]-=1; if(cart[k]<=0) delete cart[k]; saveCart(); renderCart(); updateBadges(); }
+function clearCart(){
+  if(!Object.keys(cart).length){ toast('कार्ट आधीच रिकामी आहे'); return; }
+  cart = {}; saveCart(); renderCart(); updateBadges(); toast('कार्ट रिकामी केली');
+}
+function removeProductFromCart(pid){
+  Object.keys(cart).forEach(k=>{ if(k.slice(0,k.lastIndexOf('@'))===pid) delete cart[k]; });
+}
+function renderCart(){
+  const host = document.getElementById('cartList');
+  const keys = Object.keys(cart).filter(k=>cartEntry(k));
+  if(!keys.length){
+    host.innerHTML = '<div class="empty">तुमची कार्ट रिकामी आहे.<br><br>'+
+      '<button class="bigbtn shop" onclick="go(\'products\')">🛍️ वस्तू पहा</button></div>';
+    return;
+  }
+  host.innerHTML = keys.map(k=>{
+    const e = cartEntry(k);
+    return '<div class="cartline">'+
+      '<div><div class="cn">'+esc(e.it.name)+'</div>'+
+      '<span class="cu">'+esc(e.label)+' · ₹'+e.price+'</span></div>'+
+      '<div class="qty">'+
+        '<button onclick="decQty(\''+k+'\')">−</button>'+
+        '<span>'+cart[k]+'</span>'+
+        '<button onclick="incQty(\''+k+'\')">+</button>'+
+      '</div></div>';
+  }).join('') +
+  '<div class="totalrow"><span>एकूण</span><b>₹'+cartTotal()+'</b></div>'+
+  '<div class="custbox">'+
+    '<div class="custhead">📋 तुमची माहिती</div>'+
+    '<div class="field"><label>तुमचे नाव</label><input id="cName" data-k="name" value="'+esc(customer.name||'')+'" placeholder="तुमचे नाव" oninput="setCustomer(this)"></div>'+
+    '<div class="field"><label>मोबाईल नंबर</label><input id="cPhone" data-k="phone" type="tel" inputmode="numeric" maxlength="10" value="'+esc(customer.phone||'')+'" placeholder="10 अंकी मोबाईल नंबर" oninput="setCustomer(this)"></div>'+
+    '<div class="field" style="margin-bottom:0"><label>पत्ता</label><input id="cAddr" data-k="address" value="'+esc(customer.address||'')+'" placeholder="घर नं. / रस्ता / भाग" oninput="setCustomer(this)"></div>'+
+  '</div>'+
+  '<button class="bigbtn wa" onclick="whatsappOrder()">💬 WhatsApp वर ऑर्डर करा</button>'+
+  '<button class="bigbtn map" onclick="clearCart()" style="margin-top:12px">🗑️ कार्ट रिकामी करा</button>';
+}
+function whatsappOrder(){
+  const keys = Object.keys(cart).filter(k=>cartEntry(k));
+  if(!keys.length){ toast('कार्ट रिकामी आहे'); return; }
+  const name = (customer.name || '').trim();
+  const phone = (customer.phone || '').replace(/[^0-9]/g,'');
+  const addr = (customer.address || '').trim();
+  if(!name){ toast('कृपया तुमचे नाव टाका'); return; }
+  if(phone.length !== 10){ toast('कृपया 10 अंकी मोबाईल नंबर टाका'); return; }
+  customer.phone = phone; saveCustomer();
+  const lines = []; let total = 0;
+  for(const k in cart){
+    const e = cartEntry(k); if(!e) continue;
+    const amt = e.price * cart[k];
+    total += amt;
+    lines.push('• ' + e.it.name + ' — ' + e.label + ' × ' + cart[k] + ' — ₹' + amt);
+  }
+  let text = 'नमस्कार ' + data.store.name + ',\n';
+  text += 'नाव: ' + name + '\n';
+  text += 'मोबाईल: ' + phone + '\n';
+  if(addr) text += 'पत्ता: ' + addr + '\n';
+  text += '\nमला खालील वस्तू हव्या आहेत:\n' + lines.join('\n') + '\n\nएकूण: ₹' + total;
+  window.open(waLink(text), '_blank');
+}
+
+/* ============================================================
+   ADMIN
+   ============================================================ */
+function renderAdminScreen(){
+  document.getElementById('loginView').classList.toggle('hidden', isLoggedIn);
+  document.getElementById('panelView').classList.toggle('hidden', !isLoggedIn);
+  if(isLoggedIn) renderAdmin();
+}
+function doLogin(){
+  const pw = document.getElementById('pw').value;
+  const err = document.getElementById('loginErr');
+  if(pw === data.password){
+    isLoggedIn = true; err.textContent=''; document.getElementById('pw').value='';
+    renderAdminScreen(); toast('लॉगिन झाले ✅');
+  }else{
+    err.textContent = 'चुकीचा पासवर्ड. पुन्हा प्रयत्न करा.';
+  }
+}
+function renderAdmin(){
+  const totalProd = data.categories.reduce((a,c)=>a+c.products.length,0);
+  const availProd = data.categories.reduce((a,c)=>a+c.products.filter(x=>x.available).length,0);
+  document.getElementById('stCat').textContent = data.categories.length;
+  document.getElementById('stProd').textContent = totalProd;
+  document.getElementById('stAvail').textContent = availProd;
+
+  const panel = document.getElementById('catPanel');
+  panel.innerHTML = '';
+  data.categories.forEach(cat=>{
+    const block = document.createElement('div');
+    block.className = 'cat-block';
+    let rows = '';
+    if(cat.products.length===0){
+      rows = '<div class="arow"><div class="meta"><span>अजून वस्तू नाही.</span></div></div>';
+    }else{
+      cat.products.forEach(it=>{
+        rows += '<div class="arow">'+
+          '<div class="meta"><b>'+esc(it.name)+'</b>'+
+          '<span>₹'+esc(it.price)+' / '+baseLabel(it)+' · पॅक '+esc(it.pack)+'</span></div>'+
+          '<div class="acts">'+
+            '<button class="icon-btn '+(it.available?'on':'')+'" title="उपलब्ध" onclick="toggleAvail(\''+cat.id+'\',\''+it.id+'\')">'+(it.available?'✅':'🚫')+'</button>'+
+            '<button class="icon-btn" title="Edit" onclick="openEditProduct(\''+cat.id+'\',\''+it.id+'\')">✏️</button>'+
+            '<button class="icon-btn del" title="Delete" onclick="delProduct(\''+cat.id+'\',\''+it.id+'\')">🗑️</button>'+
+          '</div></div>';
+      });
+    }
+    block.innerHTML =
+      '<div class="cat-head"><strong>'+esc(cat.name)+'</strong>'+
+        '<div class="acts">'+
+          '<button class="btn-sm" onclick="openAddProduct(\''+cat.id+'\')">➕ वस्तू</button>'+
+          '<button class="icon-btn del" title="Category delete" onclick="delCategory(\''+cat.id+'\')">🗑️</button>'+
+        '</div></div>' + rows;
+    panel.appendChild(block);
+  });
+}
+
+/* ---------- categories ---------- */
+function openAddCategory(){
+  openModal('नवीन Category', '<div class="field"><label>Category नाव</label><input id="mi_name" placeholder="उदा. पेय"></div>',
+    ()=>{
+      const name = document.getElementById('mi_name').value.trim();
+      if(!name){ toast('नाव टाका'); return false; }
+      data.categories.push({id:uid(), name, products:[]});
+      save(); renderAdmin(); renderCategories(); toast('Category जोडली ✅'); return true;
+    });
+}
+function delCategory(cid){
+  const cat = findCat(cid); if(!cat) return;
+  if(!confirm('"'+cat.name+'" Category आणि त्यातील सर्व वस्तू हटवायचे?')) return;
+  cat.products.forEach(it=>removeProductFromCart(it.id));
+  data.categories = data.categories.filter(c=>c.id!==cid);
+  if(activeCat===cid) activeCat = data.categories[0] ? data.categories[0].id : null;
+  saveCart(); save(); renderAdmin(); renderCategories(); renderProducts(); updateBadges(); toast('Category हटवली');
+}
+
+/* ---------- products ---------- */
+function productForm(name, base, price, mrp, pack, img){
+  return '<div class="field"><label>वस्तूचे नाव</label><input id="mi_name" value="'+esc(name)+'" placeholder="उदा. तांदूळ"></div>'+
+    '<div class="field"><label>किंमत (₹ प्रति kg / litre / नग)</label><input id="mi_price" type="number" min="0" value="'+esc(price)+'" placeholder="60"></div>'+
+    '<div class="field"><label>MRP (₹, ऐच्छिक)</label><input id="mi_mrp" type="number" min="0" value="'+esc(mrp)+'" placeholder="72"></div>'+
+    '<div class="row2">'+
+      '<div class="field"><label>प्रकार</label><select id="mi_base" onchange="refreshPackOptions()">'+
+        '<option value="kg"'+(base==='kg'?' selected':'')+'>वजन (kg)</option>'+
+        '<option value="L"'+(base==='L'?' selected':'')+'>द्रव (litre)</option>'+
+        '<option value="pc"'+(base==='pc'?' selected':'')+'>नग (packet / piece)</option>'+
+      '</select></div>'+
+      '<div class="field"><label>डिफॉल्ट पॅक</label><select id="mi_pack"></select></div>'+
+    '</div>'+
+    '<div class="field"><label>वस्तूचा फोटो</label>'+
+      '<div class="imgpick">'+
+        '<div class="imgprev" id="imgPrev">'+(img ? '<img src="'+esc(img)+'" alt="">' : 'फोटो नाही')+'</div>'+
+        '<div class="imgbtns">'+
+          '<button type="button" class="btn-sm" onclick="pickImage(true)">📷 कॅमेऱ्याने फोटो</button>'+
+          '<button type="button" class="btn-sm ghost" onclick="pickImage(false)">🖼️ गॅलरीतून निवडा</button>'+
+          '<button type="button" class="btn-sm ghost" onclick="clearModalImg()">✖ फोटो काढा</button>'+
+        '</div>'+
+      '</div>'+
+      '<input type="file" id="imgCam" accept="image/*" capture="environment" class="hidden" onchange="onPickImage(this)">'+
+      '<input type="file" id="imgGal" accept="image/*" class="hidden" onchange="onPickImage(this)">'+
+    '</div>';
+}
+function refreshPackOptions(keep){
+  const base = document.getElementById('mi_base').value;
+  const sel = document.getElementById('mi_pack');
+  let opts = base==='kg' ? WEIGHT_PACKS.map(x=>x.label)
+           : base==='L'  ? VOLUME_PACKS.map(x=>x.label)
+           : PC_PACKS.slice();
+  const want = keep || sel.value;
+  sel.innerHTML = opts.map(l=>'<option value="'+esc(l)+'"'+(l===want?' selected':'')+'>'+esc(l)+'</option>').join('');
+}
+function readProductForm(){
+  const name = document.getElementById('mi_name').value.trim();
+  const price = document.getElementById('mi_price').value.trim();
+  const mrpRaw = document.getElementById('mi_mrp').value.trim();
+  const base = document.getElementById('mi_base').value;
+  const pack = document.getElementById('mi_pack').value;
+  const img = modalImg;
+  if(!name){ toast('वस्तूचे नाव टाका'); return null; }
+  if(price==='' || isNaN(Number(price))){ toast('योग्य किंमत टाका'); return null; }
+  let mrp = (mrpRaw==='' || isNaN(Number(mrpRaw))) ? Number(price) : Number(mrpRaw);
+  if(mrp < Number(price)) mrp = Number(price);
+  return {name, base, price:Number(price), mrp, pack, img};
+}
+function openAddProduct(cid){
+  const cat = findCat(cid); if(!cat) return;
+  modalImg = '';
+  openModal('नवीन वस्तू — '+cat.name, productForm('', 'kg', '', '', '', ''),
+    ()=>{
+      const v = readProductForm(); if(!v) return false;
+      cat.products.push({id:uid(), ...v, available:true});
+      save(); renderAdmin(); renderCategories(); renderProducts(); toast('वस्तू जोडली ✅'); return true;
+    });
+  refreshPackOptions('1 kg');
+}
+function openEditProduct(cid, pid){
+  const cat = findCat(cid); const it = findProduct(cat, pid); if(!it) return;
+  modalImg = it.img || '';
+  openModal('वस्तू Edit — '+cat.name, productForm(it.name, it.base, it.price, it.mrp, it.pack, it.img),
+    ()=>{
+      const v = readProductForm(); if(!v) return false;
+      Object.assign(it, v);
+      selPack[it.id] = it.pack;
+      save(); renderAdmin(); renderProducts(); toast('बदल सेव्ह झाले ✅'); return true;
+    });
+  refreshPackOptions(it.pack);
+}
+function delProduct(cid, pid){
+  const cat = findCat(cid); const it = findProduct(cat, pid); if(!it) return;
+  if(!confirm('"'+it.name+'" हटवायची?')) return;
+  removeProductFromCart(pid);
+  cat.products = cat.products.filter(x=>x.id!==pid);
+  saveCart(); save(); renderAdmin(); renderCategories(); renderProducts(); updateBadges(); renderCart(); toast('वस्तू हटवली');
+}
+function toggleAvail(cid, pid){
+  const cat = findCat(cid); const it = findProduct(cat, pid); if(!it) return;
+  it.available = !it.available;
+  if(!it.available){ removeProductFromCart(pid); saveCart(); }
+  save(); renderAdmin(); renderProducts(); updateBadges(); renderCart();
+  toast(it.available ? 'आता उपलब्ध ✅' : 'Unavailable केले 🚫');
+}
+
+/* ---------- modal ---------- */
+let _modalSave = null;
+function openModal(title, bodyHtml, onSave){
+  document.getElementById('mTitle').textContent = title;
+  document.getElementById('mBody').innerHTML = bodyHtml;
+  _modalSave = onSave;
+  document.getElementById('modal').classList.remove('hidden');
+}
+function closeModal(){ document.getElementById('modal').classList.add('hidden'); _modalSave=null; }
+function modalSave(){ if(_modalSave && _modalSave()!==false) closeModal(); }
+
+/* ---------- product photo (camera / gallery) ---------- */
+let modalImg = '';
+function pickImage(cam){
+  const el = document.getElementById(cam ? 'imgCam' : 'imgGal');
+  if(el) el.click();
+}
+function onPickImage(input){
+  const f = input.files && input.files[0];
+  if(!f) return;
+  const reader = new FileReader();
+  reader.onload = e=>{
+    const im = new Image();
+    im.onload = ()=>{
+      const max = 420;
+      let w = im.width, h = im.height;
+      if(w >= h && w > max){ h = Math.round(h*max/w); w = max; }
+      else if(h > w && h > max){ w = Math.round(w*max/h); h = max; }
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      c.getContext('2d').drawImage(im, 0, 0, w, h);
+      modalImg = c.toDataURL('image/jpeg', 0.7);
+      const prev = document.getElementById('imgPrev');
+      if(prev) prev.innerHTML = '<img src="'+modalImg+'" alt="">';
+    };
+    im.src = e.target.result;
+  };
+  reader.readAsDataURL(f);
+  input.value = '';
+}
+function clearModalImg(){
+  modalImg = '';
+  const prev = document.getElementById('imgPrev');
+  if(prev) prev.textContent = 'फोटो नाही';
+}
+document.getElementById('modal').addEventListener('click', e=>{ if(e.target.id==='modal') closeModal(); });
+
+/* ---------- misc admin ---------- */
+function changePassword(){
+  const np = prompt('नवीन पासवर्ड टाका:');
+  if(np===null) return;
+  if(np.trim().length<4){ toast('पासवर्ड कमीत कमी 4 अक्षरी असावा'); return; }
+  data.password = np.trim(); save(); toast('पासवर्ड बदलला ✅');
+}
+function exportData(){
+  const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'kirana-backup.json';
+  a.click(); URL.revokeObjectURL(a.href);
+  toast('बॅकअप डाउनलोड झाला ⬇️');
+}
+function resetData(){
+  if(!confirm('सर्व बदल हटवून सुरुवातीचा डेटा परत आणायचा?')) return;
+  data = structuredClone(DEFAULT_DATA);
+  activeCat = data.categories[0].id;
+  selPack = {};
+  save(); renderStore(); renderCategories(); renderProducts(); renderAdmin();
+  toast('सुरुवातीचा डेटा परत आणला ♻️');
+}
+
+/* ---------- boot ---------- */
+renderStore();
+renderCategories();
+renderProducts();
+renderCart();
+updateBadges();
+go('home');
+</script>
+</body>
+</html>
