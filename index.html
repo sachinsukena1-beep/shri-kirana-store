@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#00953B">
+<!-- ---------- PWA ---------- -->
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="description" content="ताजे धान्य, डाळी, मसाले आणि घरगुती वस्तूंसाठी श्री किराणा स्टोअर ऑनलाइन दुकान.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="किराणा स्टोअर">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <title>श्री किराणा स्टोअर</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&display=swap');
@@ -919,6 +929,17 @@ renderProducts();
 renderCart();
 updateBadges();
 go('home');
+</script>
+
+<!-- ---------- PWA: service worker registration ---------- -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch((err) => {
+        console.warn('Service worker registration failed:', err);
+      });
+    });
+  }
 </script>
 </body>
 </html>
